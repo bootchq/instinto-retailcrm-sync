@@ -1,0 +1,18 @@
+# Вставь этот блок в файл `env` (в конец) и заполни значения.
+#
+# 1) Создай бота: Telegram → @BotFather → /newbot → получишь TOKEN
+# 2) Напиши своему боту в личку "test"
+# 3) Узнай CHAT_ID (личка) — проще всего скриптом:
+#      python telegram_get_chat_id.py
+#    (он сам проверит токен и выведет chat.id)
+#
+#    Если хочешь через браузер — URL БЕЗ угловых скобок:
+#      https://api.telegram.org/botTOKEN/getUpdates
+#    где TOKEN выглядит как: 123456789:AA...
+#
+# После этого weekly-run начнёт присылать сводку в личку.
+
+TELEGRAM_ENABLED="1"
+TELEGRAM_BOT_TOKEN="PASTE_TOKEN_HERE"
+TELEGRAM_CHAT_ID="PASTE_CHAT_ID_HERE"
+

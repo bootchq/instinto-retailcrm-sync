@@ -1,0 +1,49 @@
+# Виртуальное окружение
+.venv/
+venv/
+env/
+
+# Переменные окружения
+env
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Логи
+*.log
+export_log.txt
+*.json
+!railway.json
+!railway_incremental.json
+!RAILWAY_VARIABLES_BACKUP.json
+
+# Временные файлы
+*.tmp
+*.bak
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Curl файлы с токенами
+web_curl.txt
+web_messages_curl.txt
+
+# Launchd
+launchd/
+
+# Markdown документация (опционально)
+# *.md

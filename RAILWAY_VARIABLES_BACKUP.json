@@ -1,0 +1,23 @@
+{
+  "project": "instinto-analytics",
+  "backed_up_at": "2026-01-30",
+  "services": {
+    "instinto-analytics": {
+      "CHANNELS": "whatsapp,instagram",
+      "END_DATE": "2026-01-21",
+      "GOOGLE_SHEETS_ID": "1to83Pw9vjl6p1RnnrJT-qtHc85x5s2U_qYp6jSZKhYM",
+      "LAST_DAYS": "120",
+      "RETAILCRM_API_KEY": "YF6FMd9pxeNtdBajaLFLs1FJgiQSuHqo",
+      "RETAILCRM_LOGIN": "imatic@mail.ru",
+      "RETAILCRM_URL": "https://instinto.retailcrm.ru",
+      "START_DATE": "2025-09-23",
+      "TELEGRAM_BOT_TOKEN": "8324229923:AAFDMCvLoWDagiqV2vRdh7cfx2lyw_PmThQ",
+      "TELEGRAM_CHAT_ID": "57186925",
+      "TZ": "Europe/Moscow",
+      "WORK_HOURS": "10:00-23:00"
+    },
+    "daily-report": "same variables",
+    "weekly-report": "same variables"
+  },
+  "note": "Проект удалён из Railway. Заменён на instinto-academy-analyzer."
+}
