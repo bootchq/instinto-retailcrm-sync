@@ -7,7 +7,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict, List
 
-from sheets import open_spreadsheet
+from sheets_retailcrm import open_spreadsheet
 
 
 def _load_env(env_path: Path) -> Dict[str, str]:

@@ -24,7 +24,7 @@ except Exception:
 
 from dateutil import parser as dtparser
 from retailcrm_client import RetailCrmClient, RetailCrmError
-from sheets import open_spreadsheet
+from sheets_retailcrm import open_spreadsheet
 
 
 def _load_env(env_path: Path) -> Dict[str, str]:

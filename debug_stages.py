@@ -1,7 +1,7 @@
 """Отладка определения этапов продаж."""
 
 from pathlib import Path
-from sheets import open_spreadsheet
+from sheets_retailcrm import open_spreadsheet
 
 
 def _load_env(env_path: Path):

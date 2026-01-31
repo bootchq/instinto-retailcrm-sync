@@ -22,7 +22,7 @@ except Exception:
 
 from dateutil import parser as dtparser
 from retailcrm_client import RetailCrmClient, RetailCrmError
-from sheets import dicts_to_table, open_spreadsheet, upsert_worksheet
+from sheets_retailcrm import dicts_to_table, open_spreadsheet, upsert_worksheet
 
 
 def _load_env(env_path: Path) -> Dict[str, str]:

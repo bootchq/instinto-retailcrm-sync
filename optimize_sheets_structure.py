@@ -12,7 +12,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict, List
 
-from sheets import open_spreadsheet, upsert_worksheet, dicts_to_table
+from sheets_retailcrm import open_spreadsheet, upsert_worksheet, dicts_to_table
 
 
 def _load_env(env_path: Path) -> Dict[str, str]:

@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from sheets import dicts_to_table, open_spreadsheet, upsert_worksheet
+from sheets_retailcrm import dicts_to_table, open_spreadsheet, upsert_worksheet
 
 
 def _load_env(env_path: Path) -> Dict[str, str]:

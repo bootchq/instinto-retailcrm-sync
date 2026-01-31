@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional
 import requests
 
 from daily_report import main as generate_daily_report
-from sheets import open_spreadsheet
+from sheets_retailcrm import open_spreadsheet
 
 
 def _load_env(env_path: Path) -> Dict[str, str]:

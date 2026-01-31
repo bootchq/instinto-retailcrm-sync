@@ -15,7 +15,7 @@ except Exception:
     def load_dotenv(*args: Any, **kwargs: Any) -> bool:
         return False
 
-from sheets import open_spreadsheet, get_existing_chat_ids, append_to_worksheet, dicts_to_table
+from sheets_retailcrm import open_spreadsheet, get_existing_chat_ids, append_to_worksheet, dicts_to_table
 from export_to_sheets import (
     _env, _normalize_chat, _normalize_message,
     _iter_web_chats, _fetch_web_messages_for_chat,

@@ -21,7 +21,7 @@ from analysis_rules import aggregate_channel_summary, aggregate_manager_summary,
 from dateutil import parser as dtparser
 from datetime import timedelta
 from retailcrm_client import RetailCrmClient, RetailCrmError
-from sheets import dicts_to_table, open_spreadsheet, upsert_worksheet
+from sheets_retailcrm import dicts_to_table, open_spreadsheet, upsert_worksheet
 from web_graphql import WebGraphQLClient, WebGraphQLError
 
 

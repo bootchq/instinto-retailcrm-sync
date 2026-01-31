@@ -20,7 +20,7 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
-from sheets import open_spreadsheet
+from sheets_retailcrm import open_spreadsheet
 
 
 def _load_env(env_path: Path) -> Dict[str, str]:
