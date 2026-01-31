@@ -300,10 +300,11 @@ def main() -> None:
                         messages = []
 
                 # Вычисляем метрики
+                # users уже является словарём {id: user}, не нужно преобразовывать
                 metrics = compute_chat_metrics(
                     chat,
                     messages,
-                    users_by_id={u.get("id"): u for u in users},
+                    users_by_id=users,
                     tz_name=tz_name,
                     work_hours=work_hours,
                 )
