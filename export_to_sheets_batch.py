@@ -227,6 +227,22 @@ def main() -> None:
         print("✅ Все чаты уже обработаны!")
         return
 
+    # Создаём клиент для получения сообщений
+    wg_messages = None
+    try:
+        if os.path.exists(os.path.join(os.path.dirname(__file__), web_messages_curl_file)):
+            web_messages_curl_file_path = os.path.join(os.path.dirname(__file__), web_messages_curl_file)
+        else:
+            web_messages_curl_file_path = web_messages_curl_file
+        if os.path.exists(web_messages_curl_file_path):
+            wg_messages = WebGraphQLClient(curl_file=web_messages_curl_file_path, timeout_s=web_timeout_s, max_retries=web_retries)
+            print(f"✅ WEB messages: ON (файл: {web_messages_curl_file})")
+    except Exception as e:
+        print(f"⚠️ WEB messages disabled / failed: {e}")
+
+    if wg_messages is None:
+        print("⚠️ WEB messages: OFF -> используем пустой список сообщений")
+
     # Обрабатываем партиями
     total_processed = len(existing_chat_ids)
     total_skipped = 0
@@ -263,11 +279,26 @@ def main() -> None:
             try:
                 # Нормализуем чат
                 chat = _normalize_chat(raw_chat)
-                
+
                 # Получаем сообщения
                 messages: List[Dict[str, Any]] = []
-                # ... (логика получения сообщений из export_to_sheets.py)
-                
+                if wg_messages is not None and wg_messages.has_op("messages"):
+                    start_iso = f"{start}T00:00:00Z"
+                    end_iso = f"{end}T23:59:59Z"
+                    try:
+                        msgs = _fetch_web_messages_for_chat(
+                            wg_messages,
+                            chat_id=str(chat_id),
+                            start_iso=start_iso,
+                            end_iso=end_iso,
+                            page_size=50,
+                            max_messages=max_messages_per_chat,
+                        )
+                        messages = [_normalize_message(m) for m in msgs]
+                    except Exception as e:
+                        print(f"⚠️ Не удалось получить сообщения для чата {chat_id}: {e}")
+                        messages = []
+
                 # Вычисляем метрики
                 metrics = compute_chat_metrics(
                     chat,
