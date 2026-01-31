@@ -358,7 +358,9 @@ def main() -> None:
                 batch_processed += 1
 
             except Exception as e:
+                import traceback
                 print(f"⚠️ Ошибка при обработке чата {chat_id}: {e}")
+                print(f"   Traceback:\n{traceback.format_exc()}")
                 batch_skipped += 1
                 continue
 
