@@ -246,7 +246,6 @@ def main() -> None:
             _web_message_to_minimal,
             _parse_iso,
             find_related_order,
-            _get_payment_status,
         )
 
         for raw_chat in batch:
