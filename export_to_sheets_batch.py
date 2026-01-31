@@ -57,9 +57,16 @@ def _normalize_message(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 def _normalize_chat(raw: Dict[str, Any]) -> Dict[str, Any]:
     """Приводит чат к минимальному общему формату."""
+    # Правильно извлекаем channel из dict (GraphQL возвращает объект)
+    channel_raw = raw.get("channel")
+    if isinstance(channel_raw, dict):
+        channel = channel_raw.get("type") or channel_raw.get("name") or ""
+    else:
+        channel = channel_raw or raw.get("source") or raw.get("type") or ""
+
     return {
         "id": raw.get("id") or raw.get("chatId") or "",
-        "channel": raw.get("channel") or raw.get("source") or raw.get("type") or "",
+        "channel": channel,
         "clientId": raw.get("clientId") or raw.get("customerId") or raw.get("contactId") or "",
         "orderId": raw.get("orderId") or raw.get("dealId") or "",
         "managerId": raw.get("managerId") or raw.get("userId") or "",
