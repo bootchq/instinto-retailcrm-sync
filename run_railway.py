@@ -32,7 +32,6 @@ def main():
     elif script == "incremental_export":
         # Инкрементальная выгрузка для частых запусков (каждые 15 мин)
         # Смотрит последние 7 дней, добавляет только новые чаты
-        import os
         os.environ.setdefault("LAST_DAYS", "7")
         from complete_export import main as incremental_main
         incremental_main()
