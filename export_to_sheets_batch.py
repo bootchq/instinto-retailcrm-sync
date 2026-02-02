@@ -97,6 +97,31 @@ def _read_existing_chat_ids(ws) -> set:
         return set()
 
 
+def get_messages_sheet_name(sent_at: str) -> str:
+    """Определяет имя листа для сообщения на основе даты отправки.
+
+    Args:
+        sent_at: Дата в формате ISO (например, "2026-02-02T10:30:00Z")
+
+    Returns:
+        Имя листа в формате "messages_YYYY_MM" (например, "messages_2026_02")
+    """
+    try:
+        # Извлекаем YYYY-MM из даты
+        if not sent_at:
+            # Если дата не указана, используем текущий месяц
+            from datetime import datetime
+            sent_at = datetime.now().strftime("%Y-%m-%d")
+
+        year_month = sent_at[:7]  # "2026-02-02" -> "2026-02"
+        return f"messages_{year_month.replace('-', '_')}"
+    except Exception:
+        # Fallback на текущий месяц
+        from datetime import datetime
+        now = datetime.now()
+        return f"messages_{now.year}_{now.month:02d}"
+
+
 def _append_to_worksheet(ss, worksheet_name: str, rows: List[List[Any]], header: List[str]) -> None:
     """Добавляет строки в существующий лист (не очищает его)."""
     try:
@@ -106,15 +131,15 @@ def _append_to_worksheet(ss, worksheet_name: str, rows: List[List[Any]], header:
         ws = ss.add_worksheet(title=worksheet_name, rows=200, cols=40)
         # Записываем заголовок
         ws.update(values=[header], range_name="A1")
-    
+
     # Получаем текущие данные
     existing_values = ws.get_all_values()
-    
+
     # Если лист пустой, добавляем заголовок
     if not existing_values:
         ws.update(values=[header], range_name="A1")
         existing_values = [header]
-    
+
     # Добавляем новые строки
     if rows:
         # Находим первую пустую строку
@@ -379,7 +404,19 @@ def main() -> None:
 
         if batch_messages_rows:
             messages_header = ["chat_id", "message_id", "sent_at", "direction", "manager_id", "text"]
-            _append_to_worksheet(ss, "messages_raw", dicts_to_table(batch_messages_rows, header=messages_header)[1:], messages_header)
+
+            # Группируем сообщения по месяцам
+            messages_by_month: Dict[str, List[Dict[str, Any]]] = {}
+            for msg in batch_messages_rows:
+                sheet_name = get_messages_sheet_name(msg.get("sent_at", ""))
+                if sheet_name not in messages_by_month:
+                    messages_by_month[sheet_name] = []
+                messages_by_month[sheet_name].append(msg)
+
+            # Записываем каждую группу в свой лист
+            for sheet_name, messages_group in messages_by_month.items():
+                print(f"   📝 Записываю {len(messages_group)} сообщений в {sheet_name}")
+                _append_to_worksheet(ss, sheet_name, dicts_to_table(messages_group, header=messages_header)[1:], messages_header)
 
         total_processed += batch_processed
         total_skipped += batch_skipped
