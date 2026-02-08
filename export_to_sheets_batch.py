@@ -309,10 +309,20 @@ def main() -> None:
                 chat_id = str(raw_chat.get("id", ""))
                 if not chat_id:
                     continue
-    
+
                 try:
-                    # Нормализуем чат
-                    chat = _normalize_chat(raw_chat)
+                    # Приводим web chat к нашему формату (как в export_to_sheets.py)
+                    # WebGraphQL возвращает nested структуру, нужно извлечь поля
+                    prepared_chat = {
+                        "id": raw_chat.get("id"),
+                        "channel": (raw_chat.get("channel") or {}).get("type") or (raw_chat.get("channel") or {}).get("name"),
+                        "clientId": (raw_chat.get("customer") or {}).get("id"),
+                        "managerId": ((raw_chat.get("lastDialog") or {}).get("responsible") or {}).get("id"),
+                        "createdAt": (raw_chat.get("lastDialog") or {}).get("createdAt") or raw_chat.get("lastActivity"),
+                        "updatedAt": raw_chat.get("lastActivity"),
+                        "status": (raw_chat.get("lastDialog") or {}).get("closedAt") and "CLOSED" or "ACTIVE",
+                    }
+                    chat = _normalize_chat(prepared_chat)
     
                     # Получаем сообщения
                     messages: List[Dict[str, Any]] = []
