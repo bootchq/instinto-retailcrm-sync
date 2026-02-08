@@ -144,6 +144,14 @@ def _append_to_worksheet(ss, worksheet_name: str, rows: List[List[Any]], header:
     if rows:
         # Находим первую пустую строку
         next_row = len(existing_values) + 1
+        required_rows = next_row + len(rows)
+
+        # Расширяем лист если нужно
+        if required_rows > ws.row_count:
+            rows_to_add = required_rows - ws.row_count + 100  # +100 про запас
+            ws.add_rows(rows_to_add)
+            print(f"   📈 Расширил лист {worksheet_name} на {rows_to_add} строк")
+
         ws.update(values=rows, range_name=f"A{next_row}")
 
 
