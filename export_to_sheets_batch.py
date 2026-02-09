@@ -313,11 +313,21 @@ def main() -> None:
                 try:
                     # Приводим web chat к нашему формату (как в export_to_sheets.py)
                     # WebGraphQL возвращает nested структуру, нужно извлечь поля
+                    responsible = (raw_chat.get("lastDialog") or {}).get("responsible") or {}
+                    responsible_id = responsible.get("id")
+                    responsible_name = responsible.get("name")
+
+                    # Добавляем менеджера из GraphQL в users если его нет
+                    if responsible_id and responsible_name and str(responsible_id).isdigit():
+                        rid = int(responsible_id)
+                        if rid not in users:
+                            users[rid] = {"id": rid, "firstName": responsible_name, "name": responsible_name}
+
                     prepared_chat = {
                         "id": raw_chat.get("id"),
                         "channel": (raw_chat.get("channel") or {}).get("type") or (raw_chat.get("channel") or {}).get("name"),
                         "clientId": (raw_chat.get("customer") or {}).get("id"),
-                        "managerId": ((raw_chat.get("lastDialog") or {}).get("responsible") or {}).get("id"),
+                        "managerId": responsible_id,
                         "createdAt": (raw_chat.get("lastDialog") or {}).get("createdAt") or raw_chat.get("lastActivity"),
                         "updatedAt": raw_chat.get("lastActivity"),
                         "status": (raw_chat.get("lastDialog") or {}).get("closedAt") and "CLOSED" or "ACTIVE",
