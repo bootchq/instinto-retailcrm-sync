@@ -368,11 +368,14 @@ def main() -> None:
                         
                         # ... (логика определения заказа)
     
+                    manager_id_val = metrics.manager_id or chat.get("managerId", "")
+                    manager_name_val = metrics.manager_name or manager_id_val  # Fallback to ID if name is empty
+
                     batch_chats_rows.append({
                         "chat_id": chat_id,
                         "channel": chat.get("channel", ""),
-                        "manager_id": metrics.manager_id or chat.get("managerId", ""),
-                        "manager_name": metrics.manager_name,
+                        "manager_id": manager_id_val,
+                        "manager_name": manager_name_val,
                         "client_id": client_id,
                         "order_id": order_id,
                         "has_order": has_order,
