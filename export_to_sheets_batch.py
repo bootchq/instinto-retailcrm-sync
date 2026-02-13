@@ -381,6 +381,8 @@ def main() -> None:
                     manager_id_val = metrics.manager_id or chat.get("managerId", "")
                     manager_name_val = metrics.manager_name or manager_id_val  # Fallback to ID if name is empty
 
+                    is_closed_val = "Да" if chat.get("status") == "CLOSED" else ""
+
                     batch_chats_rows.append({
                         "chat_id": chat_id,
                         "channel": chat.get("channel", ""),
@@ -392,13 +394,15 @@ def main() -> None:
                         "payment_status": payment_status,
                         "payment_status_ru": payment_status_ru,
                         "is_successful": is_successful,
-                        "created_at": chat.get("createdAt", ""),
-                        "updated_at": chat.get("updatedAt", ""),
+                        "order_count": "",
                         "status": chat.get("status", ""),
+                        "created_at": chat.get("createdAt", ""),
+                        "outcome": "",
                         "inbound_count": metrics.inbound_count,
                         "outbound_count": metrics.outbound_count,
                         "first_response_sec": metrics.first_response_sec if metrics.first_response_sec is not None else "",
                         "unanswered_inbound": metrics.unanswered_inbound,
+                        "is_closed": is_closed_val,
                     })
     
                     # Добавляем сообщения
@@ -426,11 +430,13 @@ def main() -> None:
             print(f"\n💾 Записываю партию {batch_num} в Google Sheets...")
             
             if batch_chats_rows:
+                # Порядок колонок ДОЛЖЕН совпадать с заголовком листа chats_raw
                 chats_header = [
                     "chat_id", "channel", "manager_id", "manager_name", "client_id", "order_id",
                     "has_order", "payment_status", "payment_status_ru", "is_successful",
-                    "created_at", "updated_at", "status",
+                    "order_count", "status", "created_at", "outcome",
                     "inbound_count", "outbound_count", "first_response_sec", "unanswered_inbound",
+                    "is_closed",
                 ]
                 _append_to_worksheet(ss, "chats_raw", dicts_to_table(batch_chats_rows, header=chats_header)[1:], chats_header)
     
