@@ -93,8 +93,9 @@ def _read_existing_chat_ids(ws) -> set:
                 existing_ids.add(str(row[chat_id_idx]).strip())
         return existing_ids
     except Exception as e:
-        print(f"⚠️ Ошибка при чтении существующих чатов: {e}")
-        return set()
+        print(f"🔴 КРИТИЧЕСКАЯ ошибка чтения существующих чатов: {e}")
+        print(f"   Прерываем работу чтобы не создать дубли!")
+        raise  # НЕ возвращаем пустой set — иначе все чаты обработаются заново
 
 
 def get_messages_sheet_name(sent_at: str) -> str:
