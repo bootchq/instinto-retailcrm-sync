@@ -99,7 +99,7 @@ def _web_channel_ids(client: WebGraphQLClient) -> Dict[str, List[int]]:
     return by_type
 
 
-def _iter_web_chats(
+def iter_web_chats(
     client: WebGraphQLClient,
     *,
     start_iso: str,
@@ -155,7 +155,7 @@ def _iter_web_chats(
     return out
 
 
-def _parse_iso(dt_str: Any) -> Any:
+def parse_iso(dt_str: Any) -> Any:
     if not dt_str:
         return None
     try:
@@ -288,7 +288,7 @@ def determine_payment_status(order: Dict[str, Any]) -> str:
     return "unknown"
 
 
-def _web_message_to_minimal(chat_id: str, node: Dict[str, Any]) -> Dict[str, Any]:
+def web_message_to_minimal(chat_id: str, node: Dict[str, Any]) -> Dict[str, Any]:
     """
     Привести GraphQL Message node к минимальному формату _normalize_message.
     """
@@ -331,7 +331,7 @@ def _web_message_to_minimal(chat_id: str, node: Dict[str, Any]) -> Dict[str, Any
     }
 
 
-def _fetch_web_messages_for_chat(
+def fetch_web_messages_for_chat(
     wg_messages: WebGraphQLClient,
     *,
     chat_id: str,
@@ -347,8 +347,8 @@ def _fetch_web_messages_for_chat(
     if not wg_messages.has_op("messages"):
         raise WebGraphQLError("Operation 'messages' not found in messages curl batch")
 
-    start_dt = _parse_iso(start_iso)
-    end_dt = _parse_iso(end_iso)
+    start_dt = parse_iso(start_iso)
+    end_dt = parse_iso(end_iso)
 
     out: List[Dict[str, Any]] = []
     before = None
@@ -377,17 +377,17 @@ def _fetch_web_messages_for_chat(
         # фильтрация по времени
         page_times = []
         for n in nodes:
-            t = _parse_iso(n.get("time"))
+            t = parse_iso(n.get("time"))
             if t:
                 page_times.append(t)
 
         for n in nodes:
-            t = _parse_iso(n.get("time"))
+            t = parse_iso(n.get("time"))
             if start_dt and t and t < start_dt:
                 continue
             if end_dt and t and t > end_dt:
                 continue
-            out.append(_web_message_to_minimal(chat_id, n))
+            out.append(web_message_to_minimal(chat_id, n))
             if len(out) >= max_messages:
                 return out
 
@@ -526,7 +526,7 @@ def main() -> None:
             if not wanted_types:
                 wanted_types = ["INSTAGRAM", "WHATSAPP"]
 
-            web_chats = _iter_web_chats(wg, start_iso=start_iso, end_iso=end_iso, channel_types=wanted_types)
+            web_chats = iter_web_chats(wg, start_iso=start_iso, end_iso=end_iso, channel_types=wanted_types)
     except Exception as e:
         print(f"WEB chats disabled / failed: {e}")
 
@@ -597,7 +597,7 @@ def main() -> None:
             start_iso = f"{start}T00:00:00Z"
             end_iso = f"{end}T23:59:59Z"
             try:
-                msgs = _fetch_web_messages_for_chat(
+                msgs = fetch_web_messages_for_chat(
                     wg_messages,
                     chat_id=str(chat_id),
                     start_iso=start_iso,

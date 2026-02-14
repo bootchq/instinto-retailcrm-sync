@@ -245,8 +245,8 @@ def main() -> None:
                     wanted_types = ["INSTAGRAM", "WHATSAPP"]
     
                 # Импортируем функцию из export_to_sheets.py
-                from export_to_sheets import _iter_web_chats
-                web_chats = _iter_web_chats(wg, start_iso=start_iso, end_iso=end_iso, channel_types=wanted_types)
+                from export_to_sheets import iter_web_chats
+                web_chats = iter_web_chats(wg, start_iso=start_iso, end_iso=end_iso, channel_types=wanted_types)
         except Exception as e:
             print(f"WEB chats disabled / failed: {e}")
     
@@ -300,9 +300,9 @@ def main() -> None:
     
             # Импортируем функции из export_to_sheets.py
             from export_to_sheets import (
-                _fetch_web_messages_for_chat,
-                _web_message_to_minimal,
-                _parse_iso,
+                fetch_web_messages_for_chat,
+                web_message_to_minimal,
+                parse_iso,
                 find_related_order,
             )
     
@@ -341,7 +341,7 @@ def main() -> None:
                         start_iso = f"{start}T00:00:00Z"
                         end_iso = f"{end}T23:59:59Z"
                         try:
-                            msgs = _fetch_web_messages_for_chat(
+                            msgs = fetch_web_messages_for_chat(
                                 wg_messages,
                                 chat_id=str(chat_id),
                                 start_iso=start_iso,
